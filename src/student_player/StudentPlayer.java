@@ -4,6 +4,7 @@ import boardgame.Move;
 
 import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
+import student_player.montecarlo.MonteCarloTreeSearchOptimizer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends PentagoPlayer {
@@ -22,13 +23,19 @@ public class StudentPlayer extends PentagoPlayer {
      * object contains the current state of the game, which your agent must use to
      * make decisions.
      */
-    public Move chooseMove(PentagoBoardState boardState) {
-        // You probably will make separate functions in MyTools.
-        // For example, maybe you'll need to load some pre-processed best opening
-        // strategies...
-        MyTools.getSomething();
+    public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
-        Move myMove = boardState.getRandomMove();
+        final boolean DEBUG = true;
+
+        MonteCarloTreeSearchOptimizer mctsOptimizer = new MonteCarloTreeSearchOptimizer();
+
+        long start = System.currentTimeMillis();
+        Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
+        float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
+
+        if (DEBUG) {
+            System.out.println(String.format("Time for Move (s): %f", timeElapsed));
+        }
 
         // Return your move to be processed by the server.
         return myMove;
