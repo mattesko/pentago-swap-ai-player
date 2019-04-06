@@ -22,15 +22,20 @@ public class StudentPlayer extends PentagoPlayer {
      * object contains the current state of the game, which your agent must use to
      * make decisions.
      */
-    public Move chooseMove(PentagoBoardState boardState) {
-        // You probably will make separate functions in MyTools.
-        // For example, maybe you'll need to load some pre-processed best opening
-        // strategies...
-        MyTools.getSomething();
+    public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
-        Move myMove = boardState.getRandomMove();
+        final boolean DEBUG = true;
+        final int DEPTH = 5;
+        ABPruningOptimizer optimizer = new ABPruningOptimizer();
+        Move myMove = optimizer.getNextBestMove(DEPTH, pentagoBoardState, pentagoBoardState.getTurnPlayer());
 
-        // Return your move to be processed by the server.
+        if (DEBUG) {
+            long start = System.nanoTime();
+            System.out.println(myMove.toPrettyString());
+            pentagoBoardState.printBoard();
+            System.out.println(String.format("Time for Move (s): %f", (System.nanoTime() - start) / 1000000f));
+        }
+
         return myMove;
     }
 }
