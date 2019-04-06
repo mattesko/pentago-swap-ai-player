@@ -42,9 +42,6 @@ class ABPruningOptimizer {
         }
 
         for (PentagoMove currentMove : legalMoves) {
-            if (alpha >= beta) {
-                break;
-            }
 
             PentagoBoardState boardState = (PentagoBoardState) pentagoBoardState.clone();
             boardState.processMove(currentMove);
@@ -66,6 +63,10 @@ class ABPruningOptimizer {
                     beta = bestScore;
                     bestMove = currentMove;
                 }
+            }
+
+            if (alpha >= beta) {
+                break;
             }
         }
 
