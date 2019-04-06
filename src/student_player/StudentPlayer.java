@@ -1,12 +1,14 @@
 package student_player;
 
 import boardgame.Move;
-
-import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
+import pentago_swap.PentagoMove;
+import pentago_swap.PentagoPlayer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends PentagoPlayer {
+
+    private MinimaxOptimizer optimizer = null;
 
     /**
      * You must modify this constructor to return your student number. This is
@@ -26,11 +28,34 @@ public class StudentPlayer extends PentagoPlayer {
         // You probably will make separate functions in MyTools.
         // For example, maybe you'll need to load some pre-processed best opening
         // strategies...
-        MyTools.getSomething();
 
         Move myMove = boardState.getRandomMove();
 
-        // Return your move to be processed by the server.
+        try {
+            myMove = chooseMove(boardState, this.optimizer);
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
+        return myMove;
+    }
+
+    private Move chooseMove(PentagoBoardState boardState, MinimaxOptimizer optimizer) {
+
+        Move myMove = boardState.getRandomMove();
+
+        if (boardState.getTurnNumber() == 1 || boardState.getTurnNumber() == 2) {
+
+            // Get first best move
+            PentagoBoardState nextMove = (PentagoBoardState) boardState.clone();
+
+            this.optimizer = new MinimaxOptimizer(boardState);
+            nextMove.processMove((PentagoMove) this.optimizer.getNextBestMove(10));
+        }
+        else {
+            myMove = optimizer.getNextBestMove(3);
+        }
+
         return myMove;
     }
 }
