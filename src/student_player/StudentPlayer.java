@@ -4,7 +4,7 @@ import boardgame.Move;
 
 import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
-import student_player.montecarlo.MonteCarloTreeSearchOptimizer;
+import student_player.montecarlo.MonteCarloOptimizer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends PentagoPlayer {
@@ -27,18 +27,17 @@ public class StudentPlayer extends PentagoPlayer {
 
         final boolean DEBUG = true;
 
-        MonteCarloTreeSearchOptimizer mctsOptimizer = new MonteCarloTreeSearchOptimizer();
-
         long start = System.currentTimeMillis();
+        MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
         Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
         float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
 
+        //noinspection ConstantConditions
         if (DEBUG) {
             System.out.println(String.format("Time for Move (s): %f", timeElapsed));
             pentagoBoardState.printBoard();
         }
 
-        // Return your move to be processed by the server.
         return myMove;
     }
 }
