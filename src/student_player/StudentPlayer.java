@@ -30,9 +30,9 @@ public class StudentPlayer extends PentagoPlayer {
 
         long start = System.currentTimeMillis();
         PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
-        PentagoMove possibleMove = simpleHeuristics.getNextMove(pentagoBoardState);
-        if (possibleMove != null) {
-            return possibleMove;
+        PentagoMove winningMove = simpleHeuristics.getNextMove(pentagoBoardState);
+        if (winningMove != null) {
+            return winningMove;
         }
 
         MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
