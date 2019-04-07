@@ -8,31 +8,15 @@ import java.util.ArrayList;
 
 public class MonteCarloTreeSearchOptimizer {
     private static final int WIN_SCORE = 10;
-    private static final int MCTS_MAX_TIME = 100;
-    private int level;
+    private static final int MAX_SEARCH_TIME_MS = 1950;
 
-    public MonteCarloTreeSearchOptimizer() {
-        this.level = 4;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    private int getMillisForCurrentLevel() {
-        return 2 * (this.level - 1) + 1;
-    }
+    public MonteCarloTreeSearchOptimizer() {super();}
 
     public Move findNextMove(PentagoBoardState pentagoBoardState) {
-        long endTime = System.currentTimeMillis() + MCTS_MAX_TIME * getMillisForCurrentLevel();
+        long endTime = System.currentTimeMillis() + MAX_SEARCH_TIME_MS;
 
-        int opponent = pentagoBoardState.getOpponent();
         Node rootNode = new Node(pentagoBoardState, null);
-        rootNode.getState().setPlayerNo(opponent);
+        rootNode.getState().setPlayerNo(pentagoBoardState.getOpponent());
 
         while (System.currentTimeMillis() < endTime) {
 
@@ -94,18 +78,18 @@ public class MonteCarloTreeSearchOptimizer {
     private int simulateRandomPlayout(Node node) {
         Node tempNode = new Node(node);
         State tempState = tempNode.getState();
-        int boardStatus = tempState.getBoardState().getWinner();
+        int winner = tempState.getBoardState().getWinner();
 
-        if (boardStatus == node.getState().getBoardState().getOpponent()) {
+        if (winner == node.getState().getBoardState().getOpponent()) {
             tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
-            return boardStatus;
+            return winner;
         }
-        while (boardStatus == Board.NOBODY) {
+        while (winner == Board.NOBODY) {
             tempState.togglePlayer();
             tempState.performRandomMove();
-            boardStatus = tempState.getBoardState().getWinner();
+            winner = tempState.getBoardState().getWinner();
         }
 
-        return boardStatus;
+        return winner;
     }
 }
