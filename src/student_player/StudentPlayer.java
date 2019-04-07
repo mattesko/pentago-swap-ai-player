@@ -2,6 +2,7 @@ package student_player;
 
 import boardgame.Move;
 
+import pentago_swap.PentagoMove;
 import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
 import student_player.montecarlo.MonteCarloOptimizer;
@@ -28,6 +29,12 @@ public class StudentPlayer extends PentagoPlayer {
         final boolean DEBUG = true;
 
         long start = System.currentTimeMillis();
+        PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
+        PentagoMove possibleMove = simpleHeuristics.getNextMove(pentagoBoardState);
+        if (possibleMove != null) {
+            return possibleMove;
+        }
+
         MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
         Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
         float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
