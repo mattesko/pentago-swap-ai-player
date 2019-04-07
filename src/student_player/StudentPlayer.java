@@ -35,6 +35,7 @@ public class StudentPlayer extends PentagoPlayer {
 
         if (DEBUG) {
             System.out.println(String.format("Time for Move (s): %f", timeElapsed));
+            pentagoBoardState.printBoard();
         }
 
         // Return your move to be processed by the server.
