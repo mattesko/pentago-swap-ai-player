@@ -2,8 +2,10 @@ package student_player;
 
 import boardgame.Move;
 
+import pentago_swap.PentagoMove;
 import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
+import student_player.montecarlo.MonteCarloOptimizer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends PentagoPlayer {
@@ -22,15 +24,27 @@ public class StudentPlayer extends PentagoPlayer {
      * object contains the current state of the game, which your agent must use to
      * make decisions.
      */
-    public Move chooseMove(PentagoBoardState boardState) {
-        // You probably will make separate functions in MyTools.
-        // For example, maybe you'll need to load some pre-processed best opening
-        // strategies...
-        MyTools.getSomething();
+    public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
-        Move myMove = boardState.getRandomMove();
+        final boolean DEBUG = true;
 
-        // Return your move to be processed by the server.
+        long start = System.currentTimeMillis();
+        PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
+        PentagoMove winningMove = simpleHeuristics.getNextMove(pentagoBoardState);
+        if (winningMove != null) {
+            return winningMove;
+        }
+
+        MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
+        Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
+        float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
+
+        //noinspection ConstantConditions
+        if (DEBUG) {
+            System.out.println(String.format("Time for Move (s): %f", timeElapsed));
+            pentagoBoardState.printBoard();
+        }
+
         return myMove;
     }
 }
