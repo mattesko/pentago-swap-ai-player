@@ -27,27 +27,17 @@ public class StudentPlayer extends PentagoPlayer {
     public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
         final boolean DEBUG = true;
+        final int DEPTH = 3;
+        ABPruningOptimizer optimizer = new ABPruningOptimizer();
 
-        long start = System.currentTimeMillis();
-        PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
-        PentagoMove winningMove = simpleHeuristics.getNextMove(pentagoBoardState);
+        long start = System.nanoTime();
+        Move myMove = optimizer.getNextBestMove(DEPTH, pentagoBoardState, pentagoBoardState.getTurnPlayer());
+        float timeElapsed = (System.nanoTime() - start) / 1000000f;
 
-        if (winningMove != null) {
-            //noinspection ConstantConditions
-            if (DEBUG) {
-                System.out.println(String.format("Time for Move (s): %f", (System.currentTimeMillis() - start) / 1000f));
-                pentagoBoardState.printBoard();
-            }
-            return winningMove;
-        }
-
-        MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
-        Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
-
-        //noinspection ConstantConditions
         if (DEBUG) {
-            System.out.println(String.format("Time for Move (s): %f", (System.currentTimeMillis() - start) / 1000f));
+            System.out.println(myMove.toPrettyString());
             pentagoBoardState.printBoard();
+            System.out.println(String.format("Time for Move (s): %f", timeElapsed));
         }
 
         return myMove;
