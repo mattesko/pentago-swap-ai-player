@@ -14,7 +14,9 @@ class ABPruningOptimizer {
     private PentagoHeuristicService heuristics;
 
     ABPruningOptimizer() {
+
         new ABPruningOptimizer(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        this.heuristics = new PentagoHeuristicService();
     }
 
     ABPruningOptimizer(int initialAlpha, int initialBeta) {
