@@ -25,12 +25,12 @@ public class StudentPlayer extends PentagoPlayer {
     public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
         final boolean DEBUG = true;
-        final int DEPTH = 5;
+        final int DEPTH = 4;
         ABPruningOptimizer optimizer = new ABPruningOptimizer();
 
-        long start = System.nanoTime();
+        long start = System.currentTimeMillis();
         Move myMove = optimizer.getNextBestMove(DEPTH, pentagoBoardState, pentagoBoardState.getTurnPlayer());
-        float timeElapsed = (System.nanoTime() - start) / 1000000f;
+        float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
 
         if (DEBUG) {
             System.out.println(myMove.toPrettyString());
