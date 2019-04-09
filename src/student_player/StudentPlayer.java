@@ -31,17 +31,22 @@ public class StudentPlayer extends PentagoPlayer {
         long start = System.currentTimeMillis();
         PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
         PentagoMove winningMove = simpleHeuristics.getNextMove(pentagoBoardState);
+
         if (winningMove != null) {
+            //noinspection ConstantConditions
+            if (DEBUG) {
+                System.out.println(String.format("Time for Move (s): %f", (System.currentTimeMillis() - start) / 1000f));
+                pentagoBoardState.printBoard();
+            }
             return winningMove;
         }
 
         MonteCarloOptimizer mctsOptimizer = new MonteCarloOptimizer();
         Move myMove = mctsOptimizer.findNextMove(pentagoBoardState);
-        float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
 
         //noinspection ConstantConditions
         if (DEBUG) {
-            System.out.println(String.format("Time for Move (s): %f", timeElapsed));
+            System.out.println(String.format("Time for Move (s): %f", (System.currentTimeMillis() - start) / 1000f));
             pentagoBoardState.printBoard();
         }
 
