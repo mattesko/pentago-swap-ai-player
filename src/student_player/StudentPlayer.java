@@ -25,7 +25,7 @@ public class StudentPlayer extends PentagoPlayer {
     public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
         final boolean DEBUG = true;
-        final int DEPTH = 5;
+        final int DEPTH = 3;
         ABPruningOptimizer optimizer = new ABPruningOptimizer();
 
         long start = System.nanoTime();
