@@ -68,9 +68,7 @@ class ABPruningOptimizer {
                 }
             }
 
-            if (alpha >= beta) {
-                break;
-            if (System.currentTimeMillis() >= this.maxSearchTime) {
+            if (System.currentTimeMillis() >= this.maxSearchTime || alpha >= beta) {
                 return new AbstractMap.SimpleImmutableEntry<>(bestScore, bestMove);
             }
         }
