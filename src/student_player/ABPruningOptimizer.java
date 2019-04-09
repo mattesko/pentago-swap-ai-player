@@ -12,22 +12,19 @@ class ABPruningOptimizer {
     private int initialAlpha;
     private int initialBeta;
     private PentagoHeuristicService heuristics;
-    private long endTime;
-    final private int MAX_SEARCH_TIME_MS = 1900;
+    private long endTime = System.currentTimeMillis() + 1900;
 
     ABPruningOptimizer() {
 
         this.initialAlpha = Integer.MIN_VALUE;
         this.initialBeta = Integer.MAX_VALUE;
         this.heuristics = new PentagoHeuristicService();
-        this.endTime = System.currentTimeMillis() + MAX_SEARCH_TIME_MS;
     }
 
     ABPruningOptimizer(int initialAlpha, int initialBeta, long maxSearchTime) {
         this.initialAlpha = initialAlpha;
         this.initialBeta = initialBeta;
         this.heuristics = new PentagoHeuristicService();
-        this.endTime = System.currentTimeMillis() + maxSearchTime;
     }
 
     PentagoMove getNextBestMove(int depth, PentagoBoardState pentagoBoardState, int currentPlayer) {
@@ -47,11 +44,8 @@ class ABPruningOptimizer {
             return new AbstractMap.SimpleImmutableEntry(bestScore, bestMove);
         }
 
-        int i = 0;
-        while(i < legalMoves.size() && System.currentTimeMillis() < this.endTime && alpha < beta) {
+        for (PentagoMove currentMove : legalMoves.subList(1, legalMoves.size())) {
 
-            PentagoMove currentMove = legalMoves.get(i);
-            i++;
             PentagoBoardState boardState = (PentagoBoardState) pentagoBoardState.clone();
             boardState.processMove(currentMove);
 
@@ -72,6 +66,10 @@ class ABPruningOptimizer {
                     beta = bestScore;
                     bestMove = currentMove;
                 }
+            }
+
+            if (System.currentTimeMillis() > this.endTime || alpha >= beta) {
+                return new AbstractMap.SimpleImmutableEntry<>(bestScore, bestMove);
             }
         }
 
