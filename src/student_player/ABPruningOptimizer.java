@@ -12,6 +12,7 @@ class ABPruningOptimizer {
     private int initialAlpha;
     private int initialBeta;
     private PentagoHeuristicService heuristics;
+    final private long maxSearchTime = System.currentTimeMillis() + 1950;
 
     ABPruningOptimizer() {
 
@@ -69,6 +70,8 @@ class ABPruningOptimizer {
 
             if (alpha >= beta) {
                 break;
+            if (System.currentTimeMillis() >= this.maxSearchTime) {
+                return new AbstractMap.SimpleImmutableEntry<>(bestScore, bestMove);
             }
         }
 
