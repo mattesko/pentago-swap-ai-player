@@ -40,7 +40,7 @@ class ABPruningOptimizer {
         int bestScore;
 
         if (depth == 0 || legalMoves.isEmpty()) {
-            bestScore = this.heuristics.computeHeuristic(pentagoBoardState, currentPlayer);
+            bestScore = this.heuristics.computeHeuristic(pentagoBoardState, currentPlayer, alpha, beta);
             return new AbstractMap.SimpleImmutableEntry(bestScore, bestMove);
         }
 
@@ -89,9 +89,9 @@ class ABPruningOptimizer {
          * @param currentPlayer The current player
          * @return Score for the currentPentagoBoardState
          */
-        private int computeHeuristic(PentagoBoardState currentPentagoBoardState, int currentPlayer) {
+        private int computeHeuristic(PentagoBoardState currentPentagoBoardState, int currentPlayer, int alpha, int beta) {
 
-            int stateScore = 0;
+            int stateScore = currentPlayer == PentagoBoardState.WHITE ? alpha : beta;
             int horizontalPieceCount = 0;
             int verticalPieceCount = 0;
             int forwardDiagonalPieceCount = 0;
