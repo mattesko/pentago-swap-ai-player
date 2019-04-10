@@ -2,10 +2,8 @@ package student_player;
 
 import boardgame.Move;
 
-import pentago_swap.PentagoMove;
 import pentago_swap.PentagoPlayer;
 import pentago_swap.PentagoBoardState;
-import student_player.montecarlo.MonteCarloOptimizer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends PentagoPlayer {
@@ -26,13 +24,24 @@ public class StudentPlayer extends PentagoPlayer {
      */
     public Move chooseMove(PentagoBoardState pentagoBoardState) {
 
-        final boolean DEBUG = true;
+        final boolean DEBUG = false;
+        PentagoSimpleHeuristics simpleHeuristics = new PentagoSimpleHeuristics();
+        Move winningMove = simpleHeuristics.getNextMove(pentagoBoardState);
+
+        long start = System.currentTimeMillis();
+        if (winningMove != null) {
+            //noinspection ConstantConditions
+            if (DEBUG) {
+                System.out.println(String.format("Time for Move (s): %f", (System.currentTimeMillis() - start) / 1000f));
+                pentagoBoardState.printBoard();
+            }
+            return winningMove;
+        }
+
         final int DEPTH = 3;
         ABPruningOptimizer optimizer = new ABPruningOptimizer();
-
-        long start = System.nanoTime();
         Move myMove = optimizer.getNextBestMove(DEPTH, pentagoBoardState, pentagoBoardState.getTurnPlayer());
-        float timeElapsed = (System.nanoTime() - start) / 1000000f;
+        float timeElapsed = (System.currentTimeMillis() - start) / 1000f;
 
         if (DEBUG) {
             System.out.println(myMove.toPrettyString());
